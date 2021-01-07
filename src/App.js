@@ -28,7 +28,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header"></header>
+      <header></header>
 
       <section>{user ? <ChatRoom /> : <SignIn />}</section>
     </div>
@@ -41,13 +41,39 @@ function SignIn() {
     auth.signInWithPopup(provider);
   };
 
-  return <button onClick={googleSignIn}>Google Sign in</button>;
+  return <button onClick={googleSignIn}>Sign-In with Google</button>;
 }
 
 function SignOut() {
   const googleSignOut = () => auth.signOut();
 
-  return auth.currentUser && <button onClick={googleSignOut}>Sign out</button>;
+  return auth.currentUser && <button onClick={googleSignOut}>Sign-Out</button>;
+}
+
+function ChatRoom() {
+  const messagesRef = firestore.collection("messages");
+  const getMessagesQuery = messagesRef.orderBy("createdAt").limit(25);
+
+  const [messages] = useCollectionData(getMessagesQuery, { idField: "id" });
+
+  return (
+    <React.Fragment>
+      <div>
+        {messages &&
+          messages.map((message) => (
+            <ChatMessage key={message.id} message={message} />
+          ))}
+      </div>
+      <div></div>
+      <div></div>
+    </React.Fragment>
+  );
+}
+
+function ChatMessage(props) {
+  const { text, uid } = props.message;
+
+  return <p>{text}</p>;
 }
 
 export default App;
