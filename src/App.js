@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./App.css";
 
 // Firebase SDK
@@ -51,6 +51,7 @@ function SignOut() {
 }
 
 function ChatRoom() {
+  const dummy = useRef();
   const messagesRef = firestore.collection("messages");
   const getMessagesQuery = messagesRef.orderBy("createdAt").limit(25);
 
@@ -70,17 +71,18 @@ function ChatRoom() {
     });
 
     setFormValue("");
+    dummy.current.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <React.Fragment>
-      <div>
+      <main>
         {messages &&
           messages.map((message) => (
             <ChatMessage key={message.id} message={message} />
           ))}
-      </div>
-
+        <div ref={dummy}></div>
+      </main>
       <form onSubmit={sendMessage}>
         <input
           value={formValue}
