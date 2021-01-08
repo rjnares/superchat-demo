@@ -28,7 +28,10 @@ function App() {
 
   return (
     <div className="App">
-      <header></header>
+      <header>
+        <h1>Chat App (Dev) 💬</h1>
+        <SignOut />
+      </header>
 
       <section>{user ? <ChatRoom /> : <SignIn />}</section>
     </div>
@@ -86,9 +89,12 @@ function ChatRoom() {
       <form onSubmit={sendMessage}>
         <input
           value={formValue}
+          placeholder={"say something!"}
           onChange={(e) => setFormValue(e.target.value)}
         />
-        <button type="submit">Send</button>
+        <button type="submit" disabled={!formValue}>
+          Send
+        </button>
       </form>
     </React.Fragment>
   );
